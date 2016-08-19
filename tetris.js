@@ -23,23 +23,8 @@ tetris.fillCells = function(coordinates, fillColor) {
 
 
 tetris.move = function(direction){
-    var reverse = false;
 
     this.fillCells(this.currentCoor,'');
-
-    for(var i = 0; i < this.currentCoor.length; i++){
-        if(direction === 'right'){
-            this.currentCoor[i].col++;
-            if(this.currentCoor[i].col > 9){
-                reverse = true;
-            }
-        } else if (direction === 'left'){
-            this.currentCoor[i].col--;
-            if(this.currentCoor[i].col < 0){
-                reverse = true;
-            }
-        }
-    }
 
     if (direction === 'right') {
         this.origin.col++;
@@ -47,25 +32,30 @@ tetris.move = function(direction){
         this.origin.col--;
     }
 
-    this.fillCells(this.currentCoor, 'black');
+    this.currentCoor = this.shapeToCoor(this.currentShape, this.origin);
 
-    if(reverse && direction === 'left'){
-        this.move('right');
-    } else if (reverse && direction === 'right'){
-        this.move('left');
+    if(this.ifReverse()) {
+        if (direction === 'right') {
+            this.origin.col--;
+        } else if (direction === 'left'){
+            this.origin.col++;
+        }
     }
+
+    this.currentCoor = this.shapeToCoor(this.currentShape, this.origin);
+    this.fillCells(this.currentCoor, 'black');
 };
 
 
 tetris.drop = function () {
     let reverse = false;
 
-    this. fillCells(this.currentCoor, '');
+    this.fillCells(this.currentCoor, '');
     this.origin.row++;
 
     for (let i = 0; i < this.currentCoor.length; i++) {
         this.currentCoor[i].row++;
-        if (this.currentCoor[i].row > 19) {
+        if (this.ifReverse()) {
             reverse = true;
         }
     }
@@ -75,12 +65,39 @@ tetris.drop = function () {
             this.currentCoor[j].row--;
         }
         this.origin.row--;
-        setTimeout(() => {
-            this.spawn();
-        }, 100);
     }
 
     this.fillCells(this.currentCoor, 'black');
+
+    if (reverse) {
+        this.fillCells(this.currentCoor, 'BLACK');
+        this.emptyFullRow();
+        this.spawn();
+    }
+};
+
+
+tetris.emptyFullRow = function () {
+    let drops = 0;
+
+    for (let row = 19; row >= 0; row--) {
+        let rowIsFull = true;
+
+        for(let col = 0; col < 10; col++) {
+            var $coor = $(`.${row}`).find(`#${col}`);
+            if($coor.attr('bgcolor') !== 'BLACK') {
+                rowIsFull = false;
+            }
+
+            if (drops > 0) {
+                let $newCoor = $(`.${row + drops}`).find(`#${col}`);
+                $newCoor.attr('bgcolor', $coor.attr('bgcolor'));
+            }
+        }
+        if (rowIsFull) {
+            drops++;
+        }
+    }
 };
 
 
@@ -322,15 +339,30 @@ tetris.rotate = function () {
     this.currentCoor = this.shapeToCoor(this.currentShape, this.origin);
 
     for (let i = 0; i < this.currentCoor.length; i++) {
-        if (this.currentCoor[i].col < 0 || this.currentCoor[i].col > 9) {
+        if (this.ifReverse()) {
             this.currentShape = prevShape;
         }
     }
 
     this.currentCoor = this.shapeToCoor(this.currentShape, this.origin);
-    this.fillCells(this.currentCoor, 'blue');
+    this.fillCells(this.currentCoor, 'black');
 };
 
+
+tetris.ifReverse = function () {
+    for (let i = 0; i < this.currentCoor.length; i++) {
+        let row = this.currentCoor[i].row;
+        let col = this.currentCoor[i].col;
+        let $coor = $(`.${row}`).find(`#${col}`);
+        if (row < 0 && (col >= 0 && col < 10)) {
+            return false;
+        }
+        if ($coor.length === 0 || $coor.attr('bgcolor') === 'BLACK') {
+            return true;
+        }
+    }
+    return false;
+};
 
 tetris.currentShape = 'L';
 
