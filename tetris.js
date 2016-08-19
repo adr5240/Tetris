@@ -1,5 +1,5 @@
 let tetris = {};
-tetris.origin = { row: 5, col: 5 };
+tetris.origin = { row: -2, col: 5 };
 
 
 tetris.drawPlayField = function () {
@@ -54,6 +54,42 @@ tetris.move = function(direction){
     } else if (reverse && direction === 'right'){
         this.move('left');
     }
+};
+
+
+tetris.drop = function () {
+    let reverse = false;
+
+    this. fillCells(this.currentCoor, '');
+    this.origin.row++;
+
+    for (let i = 0; i < this.currentCoor.length; i++) {
+        this.currentCoor[i].row++;
+        if (this.currentCoor[i].row > 19) {
+            reverse = true;
+        }
+    }
+
+    if (reverse) {
+        for (let j = 0; j < this.currentCoor.length; j++) {
+            this.currentCoor[j].row--;
+        }
+        this.origin.row--;
+        setTimeout(() => {
+            this.spawn();
+        }, 100);
+    }
+
+    this.fillCells(this.currentCoor, 'black');
+};
+
+
+tetris.spawn = function () {
+        let randomIdx = Math.floor(Math.random() * 7);
+        let shapeArray = ['L', 'J', 'T', 'O', 'S', 'Z', 'I'];
+        this.currentShape = shapeArray[randomIdx];
+        this.origin = { row: -2, col: 5 };
+        this.currentCoor = this.shapeToCoor(this.currentShape, this.origin);
 };
 
 
@@ -296,7 +332,7 @@ tetris.rotate = function () {
 };
 
 
-tetris.currentShape = 'J';
+tetris.currentShape = 'L';
 
 $(document).ready(function () {
     tetris.drawPlayField();
@@ -310,6 +346,12 @@ $(document).ready(function () {
             tetris.move('right');
         } else if (e.keyCode === 38) {
             tetris.rotate();
+        } else if (e.keyCode === 40) {
+            tetris.drop();
         }
     });
+
+    let gravity = setInterval(function() {
+        tetris.drop();
+    }, 500);
 });
