@@ -1,12 +1,32 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Tetris.js</title>
-    <link rel="stylesheet" type="text/css" href="./style.css">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src='./tetris.js'></script>
-  </head>
-  <body>
-    <table id='playfield'></table>
-  </body>
+    <head>
+        <title>Falling Blocks</title>
+        <link rel="stylesheet" type="text/css" href="./style.css">
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src='./tetris.js'></script>
+    </head>
+    <body>
+
+        <div class='board'>
+            <h1>Falling Blocks</h1>
+            <button class="play">Play</button>
+            <button class="pause">Pause</button>
+
+            <table id='playfield'></table>
+            <table id='next-block'></table>
+
+            <div class='scoring'>
+                <table id='score'>
+                    Score:
+                    <td class='score'><span id='points'></span></td>
+                </table>
+            </br>
+                <table id='lines'>
+                    Lines:
+                    <td class='lines'><span id='linesCleared'></span></td>
+                </table>
+            </div>
+        </div>
+    </body>
 </html>

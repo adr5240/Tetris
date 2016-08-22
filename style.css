@@ -1,5 +1,58 @@
+body {
+    background-color: darkgrey;
+}
+
+.board {
+    width: 700px;
+    height: 750px;;
+    margin: auto;
+    background-color: lightgrey;
+
+}
+
 td {
-  width: 25px;
-  height: 25px;
-  border: 1px solid black;
+    width: 25px;
+    height: 25px;
+    border: 1px solid black;
+    margin: 50px;
+}
+
+.scoring {
+    position: relative;
+    left: 44px;
+    top: 75px;
+}
+
+table#score .score {
+    width: 100px;
+    background-color: white;
+    text-align: center;
+}
+
+table#lines .lines {
+    width: 50px;
+    background-color: white;
+    text-align: center;
+}
+
+table#playfield {
+    position: absolute;
+    left: 41%;
+    top: 100px;
+}
+
+table#next-block {
+    position: relative;
+    left: 44px;
+    top: 42px;
+    border: 1px solid black;
+}
+
+table#next-block td {
+    border: none;
+}
+
+h1 {
+    padding-top: 20px;
+    text-align: center;
 }
