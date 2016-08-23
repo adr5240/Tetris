@@ -1,13 +1,33 @@
 body {
-    background-color: darkgrey;
+    background-color: black;
+}
+
+.title {
+    font-size: 28pt;
+    font-weight: bold;
+    font-family: sans-serif;
+    font-style: italic;
+    text-decoration: underline;
 }
 
 .board {
     width: 700px;
-    height: 750px;;
+    height: 800px;;
     margin: auto;
     background-color: lightgrey;
+    border-radius: 20px;
+}
 
+.board .links {
+    margin: 0 auto;
+    width: 50%;
+    height: 40px;
+}
+
+.board li {
+    float: left;
+    margin: 10px;
+    list-style: none;
 }
 
 td {
@@ -19,8 +39,8 @@ td {
 
 .scoring {
     position: relative;
-    left: 44px;
-    top: 75px;
+    left: 10%;
+    top: -500px;
 }
 
 table#score .score {
@@ -36,15 +56,14 @@ table#lines .lines {
 }
 
 table#playfield {
-    position: absolute;
+    position: relative;
     left: 41%;
-    top: 100px;
 }
 
 table#next-block {
     position: relative;
-    left: 44px;
-    top: 42px;
+    left: 10%;
+    top: -550px;
     border: 1px solid black;
 }
 
