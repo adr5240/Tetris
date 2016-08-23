@@ -104,6 +104,9 @@ tetris.drop = function () {
 };
 
 
+
+
+
 tetris.clearRow = function () {
     let drops = 0;
 
@@ -463,20 +466,19 @@ tetris.ifUndo = function () {
 };
 
 
-tetris.isPaused = function () {
-
-    $('.pause').on('click', function(e) {
-        e.preventDefault();
-        pause = true;
-    });
-
-    $('.play').on('click', function(e) {
-        e.preventDefault();
-        pause = false;
-    });
-
-    return pause;
-};
+// tetris.isPaused = function () {
+//
+//     $('.pause').on('click', function(e) {
+//         e.preventDefault();
+//         this.pause = true;
+//     });
+//
+//     $('.play').on('click', function(e) {
+//         e.preventDefault();
+//         this.pause = false;
+//     });
+//     return this.pause;
+// };
 
 
 $(document).ready(function () {
@@ -498,9 +500,10 @@ $(document).ready(function () {
     });
 
     let gravity = function() {
-        // if (!tetris.isPaused()) {
+        // if (tetris.pause) {
             tetris.drop();
         // }
+        // tetris.isPaused();
         window.setTimeout(gravity, 500 - (tetris.speed * 50));
     };
     window.setTimeout(gravity, 500 - (tetris.speed * 50));
