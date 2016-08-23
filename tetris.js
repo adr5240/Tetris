@@ -95,6 +95,9 @@ tetris.drop = function () {
         for (let i = 1; i < this.currentCoor.length; i++) {
             let $coor = $(`.${this.currentCoor[i].row}`).find(`#${this.currentCoor[i].col}`);
             $coor.attr('blocked', true);
+            if (this.currentCoor[i].row < 0) {
+                tetris.gameOver();
+            }
         }
 
         this.fillCells(this.currentCoor, this.currentCoor[0].color);
@@ -486,7 +489,6 @@ tetris.pauseGame = function () {
 
 tetris.gameOver = function () {
     $('.gameover').addClass('visible');
-
 };
 
 
@@ -497,6 +499,34 @@ $(document).ready(function () {
     tetris.fillCells(tetris.currentCoor, 'blue');
     tetris.isPaused = true;
 
+
+    // instuctions modal
+    var modal = document.getElementById('myModal');
+    var btn = document.getElementById("myBtn");
+    var span = document.getElementsByClassName("close")[0];
+
+    btn.onclick = function() {
+        if (tetris.isPaused === false){
+            let $pause = $('.pause');
+            $pause.removeClass('pause');
+            $pause.addClass('play');
+            $pause.html('Play');
+            tetris.isPaused = true;
+        }
+        modal.style.display = "block";
+    };
+
+    span.onclick = function() {
+        modal.style.display = "none";
+    };
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    };
+
+    // controls
     $(document).keydown(function (e) {
         if (e.keyCode === 37) {
             tetris.move('left');
