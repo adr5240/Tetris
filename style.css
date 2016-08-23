@@ -1,33 +1,23 @@
 body {
     background-color: black;
+    font-family: sans-serif;
 }
 
 .title {
     font-size: 28pt;
     font-weight: bold;
-    font-family: sans-serif;
     font-style: italic;
     text-decoration: underline;
 }
 
 .board {
+    position: relative;
     width: 700px;
     height: 800px;;
     margin: auto;
     background-color: lightgrey;
     border-radius: 20px;
-}
-
-.board .links {
-    margin: 0 auto;
-    width: 50%;
-    height: 40px;
-}
-
-.board li {
-    float: left;
-    margin: 10px;
-    list-style: none;
+    clear: both;
 }
 
 td {
@@ -47,12 +37,14 @@ table#score .score {
     width: 100px;
     background-color: white;
     text-align: center;
+    border-radius: 5px;
 }
 
 table#lines .lines {
     width: 50px;
     background-color: white;
     text-align: center;
+    border-radius: 5px;
 }
 
 table#playfield {
@@ -64,7 +56,8 @@ table#next-block {
     position: relative;
     left: 10%;
     top: -550px;
-    border: 1px solid black;
+    border: 2px solid black;
+    border-radius: 10px;
 }
 
 table#next-block td {
@@ -74,4 +67,31 @@ table#next-block td {
 h1 {
     padding-top: 20px;
     text-align: center;
+}
+
+.gameover {
+    position: absolute;
+    padding-left: 50px;
+    top: 15%;
+    z-index: 5;
+    display: none;
+}
+
+.visible {
+    display: block;
+}
+
+.links {
+    margin: 0 auto;
+position: absolute;
+width: 40%;
+height: 40px;
+bottom: 15px;
+padding-left: 35%;
+}
+
+.links a {
+    float: left;
+    margin: 10px;
+    list-style: none;
 }

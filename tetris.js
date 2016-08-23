@@ -130,11 +130,11 @@ tetris.clearRow = function () {
         }
     }
     if (drops > 0) {
-        let level = this.lines % 10;
+        let level = this.lines % 5;
         this.score += 1000 * drops;
         this.lines += drops;
         if (level === 0) {
-            this.speed += 2;
+            this.speed += 1;
         }
         this.setScore();
     }
@@ -466,19 +466,16 @@ tetris.ifUndo = function () {
 };
 
 
-// tetris.isPaused = function () {
-//
-//     $('.pause').on('click', function(e) {
-//         e.preventDefault();
-//         this.pause = true;
-//     });
-//
-//     $('.play').on('click', function(e) {
-//         e.preventDefault();
-//         this.pause = false;
-//     });
-//     return this.pause;
-// };
+tetris.gameOver = function () {
+    $('.gameover').addClass('visible');
+
+};
+
+
+tetris.isPaused = function () {
+
+
+};
 
 
 $(document).ready(function () {
@@ -486,6 +483,7 @@ $(document).ready(function () {
     tetris.currentCoor = tetris.shapeToCoor(tetris.currentShape, tetris.origin);
     tetris.nextShapePreview(tetris.nextShape);
     tetris.fillCells(tetris.currentCoor, 'blue');
+    tetris.isPaused = true;
 
     $(document).keydown(function (e) {
         if (e.keyCode === 37) {
@@ -500,10 +498,38 @@ $(document).ready(function () {
     });
 
     let gravity = function() {
-        // if (tetris.pause) {
+        let $play = $('.play');
+        let $pause = $('.pause');
+        $play.on('click', function(e) {
+            e.preventDefault();
+
+            $play.removeClass('play');
+            $play.addClass('pause');
+            $play.html('Pause');
+            tetris.isPaused = false;
+        });
+
+        $pause.on('click', function(e) {
+            e.preventDefault();
+
+            $pause.removeClass('pause');
+            $pause.addClass('play');
+            $pause.html('Play');
+            tetris.isPaused = true;
+        });
+
+
+        // $('.play').on('click', function(e) {
+        //     e.preventDefault();
+        //     this.html = 'Pause';
+        //     tetris.isPaused = false;
+        // });
+
+        if (!tetris.isPaused) {
             tetris.drop();
-        // }
-        // tetris.isPaused();
+        }
+
+
         window.setTimeout(gravity, 500 - (tetris.speed * 50));
     };
     window.setTimeout(gravity, 500 - (tetris.speed * 50));
