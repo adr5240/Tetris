@@ -20,6 +20,18 @@ body {
     clear: both;
 }
 
+.board button {
+    font-size: 10pt;
+    margin: 10px 0 10px 110px;
+    position: absolute;
+    width: 75px;
+    height: 40px;
+    cursor: pointer;
+    outline: none;
+    border-radius: 10px;
+    background-color: #fff;
+}
+
 td {
     width: 25px;
     height: 25px;
@@ -58,6 +70,7 @@ table#next-block {
     top: -550px;
     border: 2px solid black;
     border-radius: 10px;
+    /*background-color: #f3f3f3;*/
 }
 
 table#next-block td {

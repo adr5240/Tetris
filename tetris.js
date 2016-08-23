@@ -472,12 +472,6 @@ tetris.gameOver = function () {
 };
 
 
-tetris.isPaused = function () {
-
-
-};
-
-
 $(document).ready(function () {
     tetris.drawPlayField();
     tetris.currentCoor = tetris.shapeToCoor(tetris.currentShape, tetris.origin);
@@ -518,18 +512,9 @@ $(document).ready(function () {
             tetris.isPaused = true;
         });
 
-
-        // $('.play').on('click', function(e) {
-        //     e.preventDefault();
-        //     this.html = 'Pause';
-        //     tetris.isPaused = false;
-        // });
-
         if (!tetris.isPaused) {
             tetris.drop();
         }
-
-
         window.setTimeout(gravity, 500 - (tetris.speed * 50));
     };
     window.setTimeout(gravity, 500 - (tetris.speed * 50));
