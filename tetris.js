@@ -120,6 +120,7 @@ tetris.clearBoard = function () {
 
     this.score = 0;
     this.lines = 0;
+    this.speed = 0;
     this.setScore();
 };
 
