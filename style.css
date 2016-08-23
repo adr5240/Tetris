@@ -87,11 +87,10 @@ h1 {
 .gameover {
     position: absolute;
     top: 10%;
-    left: 10%;
     z-index: 5;
     display: none;
     height: 80%;
-    width: 80%;
+    width: 100%;
 }
 
 .gameover button {
@@ -146,6 +145,7 @@ h1 {
     border: 1px solid #888;
     width: 50%;
     height: auto;
+    font-size: 18pt;
 }
 
 /* The Close Button */
