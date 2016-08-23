@@ -528,15 +528,20 @@ $(document).ready(function () {
 
     // controls
     $(document).keydown(function (e) {
-        if (e.keyCode === 37) {
-            tetris.move('left');
-        } else if (e.keyCode === 39) {
-            tetris.move('right');
-        } else if (e.keyCode === 38) {
-            tetris.rotate();
-        } else if (e.keyCode === 40) {
-            tetris.drop();
-        } else if (e.keyCode === 27) {
+
+        if (tetris.isPaused === false) {
+            if (e.keyCode === 37) {
+                tetris.move('left');
+            } else if (e.keyCode === 39) {
+                tetris.move('right');
+            } else if (e.keyCode === 38) {
+                tetris.rotate();
+            } else if (e.keyCode === 40) {
+                tetris.drop();
+            }
+        }
+
+        if (e.keyCode === 27) {
             tetris.pauseGame();
         }
     });

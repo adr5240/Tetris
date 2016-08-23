@@ -1,11 +1,10 @@
 body {
     background-color: black;
-    font-family: sans-serif;
+    font-family: arcade;
 }
 
 .title {
-    font-size: 28pt;
-    font-weight: bold;
+    font-size: 36pt;
     font-style: italic;
     text-decoration: underline;
 }
@@ -17,6 +16,7 @@ body {
     margin: auto;
     background-color: lightgrey;
     border-radius: 20px;
+    font-size: 16pt;
     clear: both;
 }
 
@@ -30,6 +30,8 @@ body {
     outline: none;
     border-radius: 10px;
     background-color: #fff;
+    font-family: arcade;
+    font-size: 14pt;
 }
 
 td {
@@ -84,10 +86,19 @@ h1 {
 
 .gameover {
     position: absolute;
-    padding-left: 50px;
-    top: 15%;
+    top: 10%;
+    left: 10%;
     z-index: 5;
     display: none;
+    height: 80%;
+    width: 80%;
+}
+
+.gameover button {
+    z-index: 10;
+    position: absolute;
+    bottom: 90px;
+    margin-left: 45%;
 }
 
 .visible {
@@ -96,11 +107,11 @@ h1 {
 
 .links {
     margin: 0 auto;
-position: absolute;
-width: 40%;
-height: 40px;
-bottom: 15px;
-padding-left: 35%;
+    position: absolute;
+    width: 40%;
+    height: 40px;
+    bottom: 15px;
+    padding-left: 35%;
 }
 
 .links a {
@@ -111,7 +122,7 @@ padding-left: 35%;
 
 .board button#myBtn {
     margin: 25px 0 0 0;
-    width: 100px;
+    width: 150px;
 }
 
 .modal {
