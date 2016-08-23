@@ -466,6 +466,24 @@ tetris.ifUndo = function () {
 };
 
 
+tetris.pauseGame = function () {
+    let $play = $('.play');
+    let $pause = $('.pause');
+
+    if (tetris.isPaused === true) {
+        $play.removeClass('play');
+        $play.addClass('pause');
+        $play.html('Pause');
+        tetris.isPaused = false;
+    } else if (tetris.isPaused === false){
+        $pause.removeClass('pause');
+        $pause.addClass('play');
+        $pause.html('Play');
+        tetris.isPaused = true;
+    }
+};
+
+
 tetris.gameOver = function () {
     $('.gameover').addClass('visible');
 
@@ -488,6 +506,8 @@ $(document).ready(function () {
             tetris.rotate();
         } else if (e.keyCode === 40) {
             tetris.drop();
+        } else if (e.keyCode === 27) {
+            tetris.pauseGame();
         }
     });
 
