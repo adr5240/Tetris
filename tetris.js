@@ -70,7 +70,6 @@ tetris.move = function(direction){
 
 tetris.drop = function () {
     let undo = false;
-
     this.fillCells(this.currentCoor, '');
     this.origin.row++;
 
@@ -107,7 +106,22 @@ tetris.drop = function () {
 };
 
 
+tetris.clearBoard = function () {
+    this.pauseGame();
 
+    for (let row = 0; row < 20; row++) {
+
+        for(let col = 0; col < 10; col++) {
+            var $coor = $(`.${row}`).find(`#${col}`);
+            $coor.attr('blocked', 'false');
+            $coor.attr('bgcolor', '');
+        }
+    }
+
+    this.score = 0;
+    this.lines = 0;
+    this.setScore();
+};
 
 
 tetris.clearRow = function () {
@@ -501,9 +515,11 @@ $(document).ready(function () {
 
 
     // instuctions modal
-    var modal = document.getElementById('myModal');
-    var btn = document.getElementById("myBtn");
-    var span = document.getElementsByClassName("close")[0];
+    let modal = document.getElementById('myModal');
+    let btn = document.getElementById("myBtn");
+    let span = document.getElementsByClassName("close")[0];
+    let $playAgain = $('.playAgain');
+    let $gameOver = $('.gameover');
 
     btn.onclick = function() {
         if (tetris.isPaused === false){
@@ -523,6 +539,10 @@ $(document).ready(function () {
     window.onclick = function(event) {
         if (event.target == modal) {
             modal.style.display = "none";
+        }
+        if (event.target === $playAgain[0]) {
+            tetris.clearBoard();
+            $gameOver.removeClass('visible');
         }
     };
 
