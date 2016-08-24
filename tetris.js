@@ -26,8 +26,10 @@ tetris.drawPlayField = function () {
 
     for (let sideRow = 0; sideRow < 5; sideRow++) {
         $('#next-block').append(`<tr class=side${sideRow}></tr>`);
+        $('#hold-block').append(`<tr class=hold${sideRow}></tr>`);
         for (let sideCol = 0; sideCol < 5; sideCol++) {
             $(`.side${sideRow}`).append(`<td id=side${sideCol}></td>`);
+            $(`.hold${sideRow}`).append(`<td id=hold${sideCol}></td>`);
         }
     }
 };
@@ -46,7 +48,6 @@ tetris.fillCells = function(coordinates, fillColor) {
 tetris.move = function(direction){
 
     this.fillCells(this.currentCoor,'');
-
     if (direction === 'right') {
         this.origin.col++;
     } else if (direction === 'left') {
@@ -106,12 +107,26 @@ tetris.drop = function () {
 };
 
 
+tetris.hardDrop = function () {
+
+};
+
+
 tetris.clearBoard = function () {
 
     for (let row = 0; row < 20; row++) {
 
         for(let col = 0; col < 10; col++) {
-            var $coor = $(`.${row}`).find(`#${col}`);
+            let $coor = $(`.${row}`).find(`#${col}`);
+            $coor.attr('blocked', 'false');
+            $coor.attr('bgcolor', '');
+        }
+    }
+
+    for (let row = 0; row < 5; row++) {
+
+        for(let col = 0; col < 5; col++) {
+            let $coor = $(`.hold${row}`).find(`#hold${col}`);
             $coor.attr('blocked', 'false');
             $coor.attr('bgcolor', '');
         }
@@ -120,6 +135,7 @@ tetris.clearBoard = function () {
     this.score = 0;
     this.lines = 0;
     this.speed = 0;
+    this.holdShape = undefined;
     this.setScore();
 };
 
@@ -131,7 +147,7 @@ tetris.clearRow = function () {
         let rowIsFull = true;
 
         for(let col = 0; col < 10; col++) {
-            var $coor = $(`.${row}`).find(`#${col}`);
+            let $coor = $(`.${row}`).find(`#${col}`);
             if($coor.attr('blocked') === 'false') {
                 rowIsFull = false;
             }
@@ -188,10 +204,55 @@ tetris.setScore = function () {
 };
 
 
+tetris.holdPiece = function () {
+
+    if (this.holdShape === undefined) {
+        this.fillCells(this.currentCoor, '');
+        this.holdShape = this.currentShape;
+        this.holdPreview(this.holdShape);
+        this.spawn();
+    } else if (!this.swapped){
+        let hold = this.holdShape;
+        this.holdShape = this.currentShape;
+        this.currentShape = hold;
+    }
+
+    if (!this.swapped) {
+        this.holdPreview(this.holdShape);
+        this.fillCells(this.currentCoor, '');
+        this.swapped = true;
+        this.origin = { row: -1, col: 5 };
+        this.currentCoor = this.shapeToCoor(this.currentShape, this.origin);
+    }
+};
+
+
+tetris.holdPreview = function (shape) {
+    for (let i = 0; i < 5; i++) {
+        for (let j = 0; j < 5; j++) {
+            let $coor = $(`.hold${i}`).find(`#hold${j}`);
+            $coor.attr('bgcolor', ``);
+        }
+    }
+    let coordinates = this.shapeToCoor(shape, { row: 2, col: 2 });
+    this.fillHoldPreview(coordinates, coordinates[0].color);
+};
+
+
+tetris.fillHoldPreview = function (coordinates, fillColor) {
+    for (let i = 1; i < coordinates.length; i++) {
+        let row = coordinates[i].row;
+        let col = coordinates[i].col;
+        let $coor = $(`.hold${row}`).find(`#hold${col}`);
+        $coor.attr('bgcolor', `${fillColor}`);
+    }
+};
+
+
 tetris.spawn = function () {
     if (this.shapes === undefined || this.shapes.length <= 1) {
         this.shapes = [];
-        for (var i = 0; i < window.shapes.length; i++) {
+        for (let i = 0; i < window.shapes.length; i++) {
             this.shapes.push(window.shapes[i]);
         }
     }
@@ -201,11 +262,12 @@ tetris.spawn = function () {
     this.nextShape = this.shapes.splice(randomIdx, 1)[0];
     this.nextShapePreview(this.nextShape);
     this.origin = { row: -2, col: 5 };
+    this.swapped = false;
     this.currentCoor = this.shapeToCoor(this.currentShape, this.origin);
 };
 
 
-tetris.fillPreview = function (coordinates, fillColor) {
+tetris.fillSpawnPreview = function (coordinates, fillColor) {
     for (let i = 1; i < coordinates.length; i++) {
         let row = coordinates[i].row;
         let col = coordinates[i].col;
@@ -223,7 +285,7 @@ tetris.nextShapePreview = function (shape) {
         }
     }
     let coordinates = this.shapeToCoor(shape, { row: 2, col: 2 });
-    this.fillPreview(coordinates, coordinates[0].color);
+    this.fillSpawnPreview(coordinates, coordinates[0].color);
 };
 
 
@@ -582,6 +644,8 @@ $(document).ready(function () {
                 tetris.rotate();
             } else if (e.keyCode === 40) {
                 tetris.drop();
+            } else if (e.keyCode === 16) {
+                tetris.holdPiece();
             }
         }
 

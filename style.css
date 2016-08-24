@@ -19,7 +19,7 @@ body {
 
 .board {
     position: relative;
-    width: 700px;
+    width: 900px;
     height: 800px;;
     margin: auto;
     background-color: lightgrey;
@@ -50,9 +50,9 @@ td {
 }
 
 .scoring {
-    position: relative;
+    position: absolute;
     left: 10%;
-    top: -500px;
+    top: 50%;
 }
 
 table#score .score {
@@ -71,19 +71,49 @@ table#lines .lines {
 
 table#playfield {
     position: relative;
-    left: 41%;
+    left: 35%;
 }
 
 table#next-block {
-    position: relative;
+    position: absolute;
     left: 10%;
-    top: -550px;
+    top: 25%;
     border: 2px solid black;
     border-radius: 10px;
     /*background-color: #f3f3f3;*/
 }
 
+.next-block {
+    width: 150px;
+    margin: auto;
+    display: inline;
+    position: absolute;
+    top: 22%;
+    left: 12.5%;
+}
+
+table#hold-block {
+    position: absolute;
+    left: 75%;
+    top: 25%;
+    border: 2px solid black;
+    border-radius: 10px;
+}
+
+.hold-block {
+    width: 150px;
+    margin: auto;
+    display: inline;
+    position: absolute;
+    top: 22%;
+    left: 77%;
+}
+
 table#next-block td {
+    border: none;
+}
+
+table#hold-block td {
     border: none;
 }
 
