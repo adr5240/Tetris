@@ -1,12 +1,11 @@
 let tetris = {};
 
-window.shapes = [
-    // 'L', 'L', 'L', 'L',
-    //             'J', 'J', 'J', 'J',
-    //             'O', 'O', 'O', 'O',
-    //             'T', 'T', 'T', 'T',
-    //             'S', 'S', 'S', 'S',
-    //             'Z', 'Z', 'Z', 'Z',
+window.shapes = ['L', 'L', 'L', 'L',
+                'J', 'J', 'J', 'J',
+                'O', 'O', 'O', 'O',
+                'T', 'T', 'T', 'T',
+                'S', 'S', 'S', 'S',
+                'Z', 'Z', 'Z', 'Z',
                 'I', 'I', 'I', 'I'];
 
 tetris.currentShape = window.shapes[ Math.floor(Math.random() * window.shapes.length) ];
