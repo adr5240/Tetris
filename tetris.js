@@ -107,7 +107,6 @@ tetris.drop = function () {
 
 
 tetris.clearBoard = function () {
-    this.pauseGame();
 
     for (let row = 0; row < 20; row++) {
 
@@ -503,6 +502,7 @@ tetris.pauseGame = function () {
 
 
 tetris.gameOver = function () {
+    this.pauseGame();
     $('.gameover').addClass('visible');
 };
 
