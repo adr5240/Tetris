@@ -1,11 +1,12 @@
 let tetris = {};
 
-window.shapes = ['L', 'L', 'L', 'L',
-                'J', 'J', 'J', 'J',
-                'O', 'O', 'O', 'O',
-                'T', 'T', 'T', 'T',
-                'S', 'S', 'S', 'S',
-                'Z', 'Z', 'Z', 'Z',
+window.shapes = [
+    // 'L', 'L', 'L', 'L',
+    //             'J', 'J', 'J', 'J',
+    //             'O', 'O', 'O', 'O',
+    //             'T', 'T', 'T', 'T',
+    //             'S', 'S', 'S', 'S',
+    //             'Z', 'Z', 'Z', 'Z',
                 'I', 'I', 'I', 'I'];
 
 tetris.currentShape = window.shapes[ Math.floor(Math.random() * window.shapes.length) ];
@@ -150,12 +151,19 @@ tetris.clearRow = function () {
         let points = 0;
         if (drops === 4) {
             points = 800;
+            this.tetris++;
+            if (this.tetris > 1) {
+                points += 400;
+            }
         } else if (drops === 3) {
             points = 400;
+            this.tetris = 0;
         } else if (drops === 2) {
             points = 200;
+            this.tetris = 0;
         } else {
             points = 100;
+            this.tetris = 0;
         }
 
 
@@ -166,6 +174,8 @@ tetris.clearRow = function () {
             this.speed += 1;
         }
         this.setScore();
+    } else {
+        this.tetris = 0;
     }
 };
 

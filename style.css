@@ -149,12 +149,16 @@ h1 {
 /* Modal Content/Box */
 .modal-content {
     background-color: #fefefe;
-    margin: 15% auto;
+    margin: 3% auto;
     padding: 20px;
     border: 1px solid #888;
     width: 50%;
     height: auto;
     font-size: 18pt;
+}
+
+.modal-content b {
+    text-decoration: underline;
 }
 
 /* The Close Button */
