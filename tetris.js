@@ -1,5 +1,23 @@
 let tetris = {};
 
+// SFX
+
+// Player input
+const SFXPieceHold = new Audio('SFX/SFX_PieceHold.ogg');
+const SFXPieceMoveLR = new Audio('SFX/SFX_PieceMoveLR.ogg');
+const SFXHardDrop = new Audio('SFX/SFX_PieceHardDrop.ogg');
+const SFXSoftDrop = new Audio('SFX/SFX_PieceFall.ogg');
+const SFXRotate = new Audio('SFX/SFX_ButtonUp.ogg');
+
+// Line Clears
+const SFXClearLineSingle = new Audio('SFX/SFX_SpecialLineClearSingle.ogg');
+const SFXClearLineDouble = new Audio('SFX/SFX_SpecialLineClearDouble.ogg');
+const SFXClearLineTriple = new Audio('SFX/SFX_SpecialLineClearTriple.ogg');
+const SFXClearTetris = new Audio('SFX/SFX_SpecialTetris.ogg');
+
+// Game Over
+const SFXGameOver = new Audio('SFX/SFX_GameOver.ogg');
+
 window.shapes = ['L', 'L', 'L', 'L',
                 'J', 'J', 'J', 'J',
                 'O', 'O', 'O', 'O',
@@ -62,6 +80,8 @@ tetris.move = function(direction){
         } else if (direction === 'left'){
             this.origin.col++;
         }
+    } else {
+        SFXPieceMoveLR.play();
     }
 
     this.currentCoor = this.shapeToCoor(this.currentShape, this.origin);
@@ -108,7 +128,7 @@ tetris.drop = function () {
 
 
 tetris.hardDrop = function () {
-
+    SFXHardDrop.play();
 };
 
 
@@ -167,18 +187,22 @@ tetris.clearRow = function () {
         if (drops === 4) {
             points = 1600;
             this.tetris++;
+            SFXClearTetris.play();
             if (this.tetris > 1) {
                 points += 800;
             }
         } else if (drops === 3) {
             points = 800;
             this.tetris = 0;
+            SFXClearLineTriple.play();
         } else if (drops === 2) {
             points = 400;
             this.tetris = 0;
+            SFXClearLineDouble.play();
         } else {
             points = 200;
             this.tetris = 0;
+            SFXClearLineSingle.play();
         }
 
 
@@ -210,11 +234,13 @@ tetris.holdPiece = function () {
         this.fillCells(this.currentCoor, '');
         this.holdShape = this.currentShape;
         this.holdPreview(this.holdShape);
+        SFXPieceHold.play();
         this.spawn();
     } else if (!this.swapped){
         let hold = this.holdShape;
         this.holdShape = this.currentShape;
         this.currentShape = hold;
+        SFXPieceHold.play();
     }
 
     if (!this.swapped) {
@@ -542,6 +568,7 @@ tetris.rotate = function () {
         }
     }
 
+    SFXRotate.play();
     this.currentCoor = this.shapeToCoor(this.currentShape, this.origin);
     this.fillCells(this.currentCoor, this.currentCoor[0].color);
 };
@@ -586,6 +613,8 @@ tetris.pauseGame = function () {
 tetris.gameOver = function () {
     this.ended = true;
     this.pauseGame();
+    SFXGameOver.play();
+    document.getElementById('background_audio').muted = true;
     $('.gameover').addClass('visible');
 };
 
@@ -597,6 +626,10 @@ $(document).ready(function () {
     tetris.fillCells(tetris.currentCoor, 'blue');
     tetris.isPaused = true;
     tetris.ended = false;
+    tetris.muted = false;
+
+    let music = document.getElementById("background_audio");
+    music.volume = 0.2;
 
 
     // instuctions modal
@@ -632,16 +665,21 @@ $(document).ready(function () {
             tetris.ended = false;
             tetris.clearBoard();
             $gameOver.removeClass('visible');
+            if (tetris.muted === false) {
+                document.getElementById('background_audio').muted = false;
+            }
         }
         if (event.target === $playMusic[0]) {
             document.getElementById('background_audio').muted = false;
             $playMusic.hide();
             $pauseMusic.show();
+            tetris.muted = false;
         }
         if (event.target === $pauseMusic[0]) {
             document.getElementById('background_audio').muted = true;
             $pauseMusic.hide();
             $playMusic.show();
+            tetris.muted = true;
         }
     };
 
@@ -658,6 +696,7 @@ $(document).ready(function () {
             } else if (e.keyCode === 40) {
                 tetris.score += 5;
                 tetris.setScore();
+                SFXSoftDrop.play();
                 tetris.drop();
             } else if (e.keyCode === 16) {
                 tetris.holdPiece();
