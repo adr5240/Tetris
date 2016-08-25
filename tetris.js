@@ -629,7 +629,7 @@ $(document).ready(function () {
     tetris.muted = false;
 
     let music = document.getElementById("background_audio");
-    music.volume = 0.2;
+    music.volume = 1;
 
 
     // instuctions modal
