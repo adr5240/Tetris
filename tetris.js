@@ -165,19 +165,19 @@ tetris.clearRow = function () {
     if (drops > 0) {
         let points = 0;
         if (drops === 4) {
-            points = 800;
+            points = 1600;
             this.tetris++;
             if (this.tetris > 1) {
-                points += 400;
+                points += 800;
             }
         } else if (drops === 3) {
-            points = 400;
+            points = 800;
             this.tetris = 0;
         } else if (drops === 2) {
-            points = 200;
+            points = 400;
             this.tetris = 0;
         } else {
-            points = 100;
+            points = 200;
             this.tetris = 0;
         }
 
@@ -605,6 +605,9 @@ $(document).ready(function () {
     let span = document.getElementsByClassName("close")[0];
     let $playAgain = $('.playAgain');
     let $gameOver = $('.gameover');
+    let $playMusic = $('.play-music');
+    let $pauseMusic = $('.pause-music');
+    $playMusic.hide();
 
     btn.onclick = function() {
         if (tetris.isPaused === false){
@@ -630,6 +633,16 @@ $(document).ready(function () {
             tetris.clearBoard();
             $gameOver.removeClass('visible');
         }
+        if (event.target === $playMusic[0]) {
+            document.getElementById('background_audio').muted = false;
+            $playMusic.hide();
+            $pauseMusic.show();
+        }
+        if (event.target === $pauseMusic[0]) {
+            document.getElementById('background_audio').muted = true;
+            $pauseMusic.hide();
+            $playMusic.show();
+        }
     };
 
     // controls
@@ -643,6 +656,8 @@ $(document).ready(function () {
             } else if (e.keyCode === 38) {
                 tetris.rotate();
             } else if (e.keyCode === 40) {
+                tetris.score += 5;
+                tetris.setScore();
                 tetris.drop();
             } else if (e.keyCode === 16) {
                 tetris.holdPiece();
