@@ -128,6 +128,42 @@ tetris.drop = function () {
 
 
 tetris.hardDrop = function () {
+
+    this.fillCells(this.currentCoor, '');
+    let blocked = false;
+
+    while(!(blocked || this.ifUndo())) {
+        blocked = false;
+        for (let i = 1; i < this.currentCoor.length; i++) {
+            $coor = $(`.${this.currentCoor[1].row}`).find(`#${this.currentCoor[1].col}`);
+            if ($coor.attr('blocked') === 'true') {
+                blocked = true;
+            }
+            this.currentCoor[i].row++;
+        }
+        this.origin.row++;
+        this.score += 10;
+    }
+
+    for (let j = 1; j < this.currentCoor.length; j++) {
+        this.currentCoor[j].row--;
+    }
+    this.fillCells(this.currentCoor, this.currentCoor[0].color);
+
+    for (let k = 1; k < this.currentCoor.length; k++) {
+        let $coor = $(`.${this.currentCoor[k].row}`).find(`#${this.currentCoor[k].col}`);
+        $coor.attr('blocked', 'true');
+        if (this.currentCoor[k].row < 0 && !this.ended) {
+            tetris.gameOver();
+        }
+    }
+
+    this.score -= 10;
+    this.setScore();
+
+    this.clearRow();
+    this.spawn();
+
     SFXHardDrop.play();
 };
 
@@ -174,7 +210,7 @@ tetris.clearRow = function () {
 
             if (drops > 0) {
                 let $newCoor = $(`.${row + drops}`).find(`#${col}`);
-                $newCoor.attr('bgcolor', $coor.attr('bgcolor'));
+                $newCoor.attr('bgcolor', ($coor.attr('bgcolor') || ''));
                 $newCoor.attr('blocked', $coor.attr('blocked'));
             }
         }
@@ -698,6 +734,8 @@ $(document).ready(function () {
                 tetris.setScore();
                 SFXSoftDrop.play();
                 tetris.drop();
+            } else if (e.keyCode === 32){
+                tetris.hardDrop();
             } else if (e.keyCode === 16) {
                 tetris.holdPiece();
             }
