@@ -1,6 +1,14 @@
+html {
+    margin: 0;
+    height: 100vh;
+}
+
 body {
     background-color: black;
     font-family: arcade;
+    height:100vh;
+    margin: 0;
+    overflow-x: auto;
 }
 
 @font-face {
@@ -9,18 +17,20 @@ body {
 }
 
 .title {
-    font-size: 36pt;
+    font-size: 26pt;
     font-style: italic;
     font-family: Sabo;
     color: #ff8c36;
     text-shadow: 4px 3px black;
     text-decoration: underline;
+    margin: 10px;
 }
 
 .board {
     position: relative;
-    width: 900px;
-    height: 800px;;
+    width: 55%;
+    height: 90%;
+    min-height: 650px;
     margin: auto;
     background-color: lightgrey;
     border-radius: 20px;
@@ -30,7 +40,7 @@ body {
 
 .board button {
     font-size: 10pt;
-    margin: 10px 0 10px 110px;
+    margin: 10px 0 10px 10%;
     position: absolute;
     width: 75px;
     height: 40px;
@@ -43,15 +53,15 @@ body {
 }
 
 td {
-    width: 25px;
-    height: 25px;
+    width: 10%;
+    height: 5%;
     border: 1px solid black;
     margin: 50px;
 }
 
 .scoring {
     position: absolute;
-    left: 10%;
+    left: 5%;
     top: 50%;
 }
 
@@ -72,14 +82,18 @@ table#lines .lines {
 table#playfield {
     position: relative;
     left: 35%;
+    height: 80%;
+    width: 30%;
 }
 
 table#next-block {
     position: absolute;
-    left: 10%;
+    left: 5%;
     top: 25%;
     border: 2px solid black;
     border-radius: 10px;
+    width: 20%;
+    height: 20%;
     /*background-color: #f3f3f3;*/
 }
 
@@ -89,7 +103,7 @@ table#next-block {
     display: inline;
     position: absolute;
     top: 22%;
-    left: 12.5%;
+    left: 7.5%;
 }
 
 table#hold-block {
@@ -98,6 +112,8 @@ table#hold-block {
     top: 25%;
     border: 2px solid black;
     border-radius: 10px;
+    width: 20%;
+    height: 20%;
 }
 
 .hold-block {
@@ -135,8 +151,10 @@ h1 {
 .gameover button {
     z-index: 10;
     position: absolute;
-    bottom: 90px;
+    bottom: 10%;
     margin-left: 45%;
+    overflow: visible;
+    height: 50px;
 }
 
 .visible {
@@ -148,10 +166,10 @@ h1 {
 .links {
     margin: 0 auto;
     position: absolute;
-    width: 40%;
+    width: 60%;
     height: 40px;
     bottom: 15px;
-    padding-left: 35%;
+    padding-left: 30%;
 }
 
 .links a {
@@ -162,7 +180,7 @@ h1 {
 }
 
 .board button#myBtn {
-    margin: 25px 0 0 0;
+    margin: 5% 0 0 0;
     width: 150px;
 }
 
@@ -215,4 +233,5 @@ h1 {
     width: auto;
     right: 40px;
     top: 30px;
+    cursor: pointer;
 }

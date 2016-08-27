@@ -704,6 +704,8 @@ $(document).ready(function () {
             if (tetris.muted === false) {
                 document.getElementById('background_audio').muted = false;
             }
+
+            tetris.pauseGame();
         }
         if (event.target === $playMusic[0]) {
             document.getElementById('background_audio').muted = false;
@@ -724,19 +726,25 @@ $(document).ready(function () {
 
         if (tetris.isPaused === false) {
             if (e.keyCode === 37) {
+                e.preventDefault();
                 tetris.move('left');
             } else if (e.keyCode === 39) {
+                e.preventDefault();
                 tetris.move('right');
             } else if (e.keyCode === 38) {
+                e.preventDefault();
                 tetris.rotate();
             } else if (e.keyCode === 40) {
+                e.preventDefault();
                 tetris.score += 5;
                 tetris.setScore();
                 SFXSoftDrop.play();
                 tetris.drop();
             } else if (e.keyCode === 32){
+                e.preventDefault();
                 tetris.hardDrop();
             } else if (e.keyCode === 16) {
+                e.preventDefault();
                 tetris.holdPiece();
             }
         }
