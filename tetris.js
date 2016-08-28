@@ -619,6 +619,7 @@ tetris.ifUndo = function () {
             return false;
         }
 
+
         if ($coor.length === 0 ||
             jQuery.inArray($coor.attr('bgcolor'), this.colors) >= 0 ||
             $coor.attr('blocked') === 'true') {
@@ -646,9 +647,35 @@ tetris.pauseGame = function () {
 };
 
 
+tetris.setHighscore = function () {
+    let newHighscore = (this.score > myStorage.getItem('highscore5'));
+    let i = 5;
+    while (newHighscore && i > 0) {
+        if (i === 5) {
+            myStorage.setItem('highscore5', this.score);
+        } else if (this.score > myStorage.getItem(`highscore${i}`)) {
+            let hold = myStorage.getItem(`highscore${i}`);
+            myStorage.setItem(`highscore${i}`, this.score);
+            myStorage.setItem(`highscore${i + 1}`, hold);
+            newHighscore = (this.score >= myStorage.getItem(`highscore${i - 1}`));
+        } else {
+            newHighscore = false;
+        }
+        i--;
+    }
+
+    $('.hs1').html(`1) ${myStorage.getItem('highscore1')}`);
+    $('.hs2').html(`2) ${myStorage.getItem('highscore2')}`);
+    $('.hs3').html(`3) ${myStorage.getItem('highscore3')}`);
+    $('.hs4').html(`4) ${myStorage.getItem('highscore4')}`);
+    $('.hs5').html(`5) ${myStorage.getItem('highscore5')}`);
+};
+
+
 tetris.gameOver = function () {
     this.ended = true;
     this.pauseGame();
+    this.setHighscore();
     SFXGameOver.play();
     document.getElementById('background_audio').muted = true;
     $('.gameover').addClass('visible');
@@ -656,6 +683,20 @@ tetris.gameOver = function () {
 
 
 $(document).ready(function () {
+    window.myStorage = localStorage;
+    if (myStorage.length === 0) {
+        myStorage.setItem('highscore1', 40000);
+        myStorage.setItem('highscore2', 30000);
+        myStorage.setItem('highscore3', 20000);
+        myStorage.setItem('highscore4', 10000);
+        myStorage.setItem('highscore5', 5000);
+        $('.hs1').html(`1) ${myStorage.getItem('highscore1')}`);
+        $('.hs2').html(`2) ${myStorage.getItem('highscore2')}`);
+        $('.hs3').html(`3) ${myStorage.getItem('highscore3')}`);
+        $('.hs4').html(`4) ${myStorage.getItem('highscore4')}`);
+        $('.hs5').html(`5) ${myStorage.getItem('highscore5')}`);
+    }
+
     tetris.drawPlayField();
     tetris.currentCoor = tetris.shapeToCoor(tetris.currentShape, tetris.origin);
     tetris.nextShapePreview(tetris.nextShape);
@@ -670,8 +711,11 @@ $(document).ready(function () {
 
     // instuctions modal
     let modal = document.getElementById('myModal');
+    let hsmodal = document.getElementById('hsModal');
     let btn = document.getElementById("myBtn");
+    let hsbtn = document.getElementById("highscoresBtn");
     let span = document.getElementsByClassName("close")[0];
+    let hsspan = document.getElementsByClassName("close")[1];
     let $playAgain = $('.playAgain');
     let $gameOver = $('.gameover');
     let $playMusic = $('.play-music');
@@ -689,13 +733,29 @@ $(document).ready(function () {
         modal.style.display = "block";
     };
 
+    hsbtn.onclick = function () {
+        if (tetris.isPaused === false){
+            let $pause = $('.pause');
+            $pause.removeClass('pause');
+            $pause.addClass('play');
+            $pause.html('Play');
+            tetris.isPaused = true;
+        }
+        hsmodal.style.display = "block";
+    };
+
     span.onclick = function() {
         modal.style.display = "none";
     };
 
+    hsspan.onclick = function () {
+        hsmodal.style.display = "none";
+    };
+
     window.onclick = function(event) {
-        if (event.target == modal) {
+        if (event.target == modal || event.target == hsmodal) {
             modal.style.display = "none";
+            hsmodal.style.display = "none";
         }
         if (event.target === $playAgain[0]) {
             tetris.ended = false;
@@ -781,4 +841,5 @@ $(document).ready(function () {
         window.setTimeout(gravity, 500 - (tetris.speed * 50));
     };
     window.setTimeout(gravity, 500 - (tetris.speed * 50));
+
 });
