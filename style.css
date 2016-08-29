@@ -133,6 +133,11 @@ table#hold-block td {
     border: none;
 }
 
+table#highscores {
+    text-align: center;
+    
+}
+
 h1 {
     padding-top: 20px;
     text-align: center;

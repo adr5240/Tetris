@@ -650,13 +650,25 @@ tetris.pauseGame = function () {
 tetris.setHighscore = function () {
     let newHighscore = (this.score > myStorage.getItem('highscore5'));
     let i = 5;
+    let name;
     while (newHighscore && i > 0) {
+        name = name || prompt("You set a new highscore! Please enter your name!", "AAA");
         if (i === 5) {
             myStorage.setItem('highscore5', this.score);
+            myStorage.setItem('name5', this.score);
+            myStorage.setItem('lines5', this.score);
         } else if (this.score > myStorage.getItem(`highscore${i}`)) {
-            let hold = myStorage.getItem(`highscore${i}`);
+            let scoreHold = myStorage.getItem(`highscore${i}`);
+            let nameHold = myStorage.getItem(`name${i}`);
+            let linesHold = myStorage.getItem(`lines${i}`);
+
             myStorage.setItem(`highscore${i}`, this.score);
-            myStorage.setItem(`highscore${i + 1}`, hold);
+            myStorage.setItem(`name${i}`, name);
+            myStorage.setItem(`lines${i}`, this.lines);
+
+            myStorage.setItem(`highscore${i + 1}`, scoreHold);
+            myStorage.setItem(`name${i + 1}`, nameHold);
+            myStorage.setItem(`lines${i + 1}`, linesHold);
             newHighscore = (this.score >= myStorage.getItem(`highscore${i - 1}`));
         } else {
             newHighscore = false;
@@ -664,11 +676,11 @@ tetris.setHighscore = function () {
         i--;
     }
 
-    $('.hs1').html(`1) ${myStorage.getItem('highscore1')}`);
-    $('.hs2').html(`2) ${myStorage.getItem('highscore2')}`);
-    $('.hs3').html(`3) ${myStorage.getItem('highscore3')}`);
-    $('.hs4').html(`4) ${myStorage.getItem('highscore4')}`);
-    $('.hs5').html(`5) ${myStorage.getItem('highscore5')}`);
+    for (var k = 1; k <= 5; k++) {
+        $(`.hs${k}`).html(myStorage.getItem(`highscore${k}`));
+        $(`.name${k}`).html(myStorage.getItem(`name${k}`));
+        $(`.lines${k}`).html(myStorage.getItem(`lines${k}`));
+    }
 };
 
 
@@ -690,11 +702,17 @@ $(document).ready(function () {
         myStorage.setItem('highscore3', 20000);
         myStorage.setItem('highscore4', 10000);
         myStorage.setItem('highscore5', 5000);
-        $('.hs1').html(`1) ${myStorage.getItem('highscore1')}`);
-        $('.hs2').html(`2) ${myStorage.getItem('highscore2')}`);
-        $('.hs3').html(`3) ${myStorage.getItem('highscore3')}`);
-        $('.hs4').html(`4) ${myStorage.getItem('highscore4')}`);
-        $('.hs5').html(`5) ${myStorage.getItem('highscore5')}`);
+
+        for (let i = 1; i <= 5; i++) {
+            myStorage.setItem(`name${i}`, 'AAA');
+            myStorage.setItem(`lines${i}`, '-');
+        }
+    }
+
+    for (var i = 1; i <= 5; i++) {
+        $(`.hs${i}`).html(myStorage.getItem(`highscore${i}`));
+        $(`.name${i}`).html(myStorage.getItem(`name${i}`));
+        $(`.lines${i}`).html(myStorage.getItem(`lines${i}`));
     }
 
     tetris.drawPlayField();
