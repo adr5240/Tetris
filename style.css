@@ -29,7 +29,7 @@ body {
 .board {
     position: relative;
     width: 55%;
-    height: 90%;
+    height: 97%;
     min-height: 650px;
     min-width: 550px;
     margin: auto;
@@ -93,8 +93,8 @@ table#next-block {
     top: 25%;
     border: 2px solid black;
     border-radius: 10px;
-    width: 20%;
-    height: 20%;
+    width: 150px;
+    height: 150px;
     /*background-color: #f3f3f3;*/
 }
 
@@ -104,17 +104,18 @@ table#next-block {
     display: inline;
     position: absolute;
     top: 22%;
-    left: 7.5%;
+    left: 6%;
+    font-size: 16pt;
 }
 
 table#hold-block {
     position: absolute;
-    left: 75%;
+    right: 5%;
     top: 25%;
     border: 2px solid black;
     border-radius: 10px;
-    width: 20%;
-    height: 20%;
+    width: 150px;
+    height: 150px;
 }
 
 .hold-block {
@@ -123,7 +124,8 @@ table#hold-block {
     display: inline;
     position: absolute;
     top: 22%;
-    left: 77%;
+    right: 5%;
+    font-size: 16pt;
 }
 
 table#next-block td {
@@ -221,6 +223,7 @@ h1 {
     width: 50%;
     height: auto;
     font-size: 18pt;
+    border-radius: 10px;
 }
 
 .modal-content b {
