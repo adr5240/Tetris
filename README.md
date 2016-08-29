@@ -14,4 +14,4 @@
 
 
 ## Screenshot
-    ![Live Game](./images/game.jpg?raw=true)
+![Live Game](./images/game.jpg?raw=true)
