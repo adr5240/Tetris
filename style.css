@@ -233,7 +233,9 @@ h1 {
 /* The Close Button */
 .close {
     color: #aaa;
-    float: right;
+    position: absolute;
+    right: 24.5%;
+    top: 20px;
     font-size: 28px;
     font-weight: bold;
 }
