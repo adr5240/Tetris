@@ -2,7 +2,7 @@
 
 [Play the game here][live]
 
-[live]: https://www.adam-reiter/Tetris.com
+[live]: http://www.adam-reiter/Tetris.com
 
 ## Features
 
