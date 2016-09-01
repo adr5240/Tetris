@@ -216,8 +216,8 @@ h1 {
 
 /* Modal Content/Box */
 .modal-content {
-    background-color: #fefefe;
-    margin: 3% auto;
+    background-color: #ffff8a;
+    margin: 1% auto;
     padding: 20px;
     border: 1px solid #888;
     width: 50%;
@@ -252,4 +252,30 @@ h1 {
     right: 40px;
     top: 30px;
     cursor: pointer;
+}
+
+.modal-content p {
+    text-align: center;
+    font-size: 15pt;
+    background-color: #c7c7c7;
+    padding: 10px 5px;
+    margin: 0;
+    border-radius: 20px;
+    border: 1px solid darkgrey;
+}
+
+.modal-content p.describe {
+    color: #ff8c36;
+    text-shadow: 3px 2px black;
+    background-color: #c7c7c7;
+    padding: 10px 5px;
+    font-size: 20pt;
+    margin-bottom: 0;
+}
+
+.modal-content img.instructions {
+    height: 50px;
+    width: auto;
+    margin-top: 10px;
+    clear: right;
 }

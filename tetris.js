@@ -703,17 +703,17 @@ $(document).ready(function () {
         myStorage.setItem('highscore4', 5000);
         myStorage.setItem('highscore5', 1000);
 
-        myStorage.setItem('name1', 'Adam');
+        myStorage.setItem('name1', 'Oliver');
         myStorage.setItem('name2', 'Jess');
         myStorage.setItem('name3', 'Sarah');
         myStorage.setItem('name4', 'John');
         myStorage.setItem('name5', 'Tom');
 
-        myStorage.setItem('lines1', 15);
-        myStorage.setItem('lines2', 13);
-        myStorage.setItem('lines3', 12);
+        myStorage.setItem('lines1', 35);
+        myStorage.setItem('lines2', 28);
+        myStorage.setItem('lines3', 18);
         myStorage.setItem('lines4', 9);
-        myStorage.setItem('lines5', 8);
+        myStorage.setItem('lines5', 2);
 
         // for (let i = 1; i <= 5; i++) {
         //     myStorage.setItem(`name${i}`, 'AAA');
