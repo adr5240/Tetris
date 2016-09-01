@@ -697,16 +697,28 @@ tetris.gameOver = function () {
 $(document).ready(function () {
     window.myStorage = localStorage;
     if (myStorage.length === 0) {
-        myStorage.setItem('highscore1', 40000);
-        myStorage.setItem('highscore2', 30000);
-        myStorage.setItem('highscore3', 20000);
-        myStorage.setItem('highscore4', 10000);
-        myStorage.setItem('highscore5', 5000);
+        myStorage.setItem('highscore1', 20000);
+        myStorage.setItem('highscore2', 15000);
+        myStorage.setItem('highscore3', 10000);
+        myStorage.setItem('highscore4', 5000);
+        myStorage.setItem('highscore5', 1000);
 
-        for (let i = 1; i <= 5; i++) {
-            myStorage.setItem(`name${i}`, 'AAA');
-            myStorage.setItem(`lines${i}`, '-');
-        }
+        myStorage.setItem('name1', 'Adam');
+        myStorage.setItem('name2', 'Jess');
+        myStorage.setItem('name3', 'Sarah');
+        myStorage.setItem('name4', 'John');
+        myStorage.setItem('name5', 'Tom');
+
+        myStorage.setItem('lines1', 15);
+        myStorage.setItem('lines2', 13);
+        myStorage.setItem('lines3', 12);
+        myStorage.setItem('lines4', 9);
+        myStorage.setItem('lines5', 8);
+
+        // for (let i = 1; i <= 5; i++) {
+        //     myStorage.setItem(`name${i}`, 'AAA');
+        //     myStorage.setItem(`lines${i}`, '-');
+        // }
     }
 
     for (var i = 1; i <= 5; i++) {
