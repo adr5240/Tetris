@@ -268,7 +268,6 @@ h1 {
 
 .modal-content p.describe {
     color: #ff8c36;
-    text-shadow: 3px 2px black;
     background-color: #c7c7c7;
     padding: 10px 5px;
     font-size: 20pt;
@@ -276,8 +275,21 @@ h1 {
 }
 
 .modal-content img.instructions {
-    height: 50px;
+    height: 35px;
     width: auto;
     margin-top: 10px;
     clear: right;
+}
+
+table#controls {
+    background: inherit;
+    background-color: #c7c7c7;
+    text-align: center;
+    border-radius: 5px;
+    padding: 10px 5px;
+}
+
+table#controls img {
+    display: block;
+    margin: 0 auto;
 }
