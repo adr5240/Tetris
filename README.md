@@ -7,8 +7,8 @@
 ## Features
 
 
-Falling blocks uses only HTML5, CSS3, and jQuery to run smoother than the original. Only the important
-components are re-renders which greatly improves performance. The User can save their high score in
+Falling Blocks uses only HTML5, CSS3, and jQuery to run smoother than the original. Only the important
+components are re-renders which greatly improves performance. The user can save their high score in
 their local browser's cache so they can always strive to be better. The scoring of Falling Blocks is dynamic, meaning it
 is based off of lines cleared as well as how far the user hard/soft drops blocks. This can lead to an ever changing way of
 attaining the high scores. FB also uses a classical take on the original theme song so the user can play and not be stuck in
