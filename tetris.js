@@ -651,12 +651,13 @@ tetris.setHighscore = function () {
     let newHighscore = (this.score > myStorage.getItem('highscore5'));
     let i = 5;
     let name;
+
     while (newHighscore && i > 0) {
         name = name || prompt("You set a new highscore! Please enter your name!", "AAA");
         if (i === 5) {
             myStorage.setItem('highscore5', this.score);
-            myStorage.setItem('name5', this.score);
-            myStorage.setItem('lines5', this.score);
+            myStorage.setItem('name5', name);
+            myStorage.setItem('lines5', this.lines);
         } else if (this.score > myStorage.getItem(`highscore${i}`)) {
             let scoreHold = myStorage.getItem(`highscore${i}`);
             let nameHold = myStorage.getItem(`name${i}`);
