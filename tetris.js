@@ -34,140 +34,6 @@ tetris.score = 0;
 tetris.lines = 0;
 tetris.speed = 0;
 
-tetris.drawPlayField = function () {
-    for (let row = 0; row < 20; row++) {
-        $('#playfield').append(`<tr class=${row}></tr>`);
-        for (let col = 0; col < 10; col++) {
-            $(`.${row}`).append(`<td id=${col} blocked=${false}></td>`);
-        }
-    }
-
-    for (let sideRow = 0; sideRow < 5; sideRow++) {
-        $('#next-block').append(`<tr class=side${sideRow}></tr>`);
-        $('#hold-block').append(`<tr class=hold${sideRow}></tr>`);
-        for (let sideCol = 0; sideCol < 5; sideCol++) {
-            $(`.side${sideRow}`).append(`<td id=side${sideCol}></td>`);
-            $(`.hold${sideRow}`).append(`<td id=hold${sideCol}></td>`);
-        }
-    }
-};
-
-
-tetris.fillCells = function(coordinates, fillColor) {
-    for (let i = 1; i < coordinates.length; i++) {
-        let row = coordinates[i].row;
-        let col = coordinates[i].col;
-        let $coor = $(`.${row}`).find(`#${col}`);
-        $coor.attr('bgcolor', `${fillColor}`);
-    }
-};
-
-
-tetris.move = function(direction){
-
-    this.fillCells(this.currentCoor,'');
-    if (direction === 'right') {
-        this.origin.col++;
-    } else if (direction === 'left') {
-        this.origin.col--;
-    }
-
-    this.currentCoor = this.shapeToCoor(this.currentShape, this.origin);
-
-    if(this.ifUndo()) {
-        if (direction === 'right') {
-            this.origin.col--;
-        } else if (direction === 'left'){
-            this.origin.col++;
-        }
-    } else {
-        SFXPieceMoveLR.play();
-    }
-
-    this.currentCoor = this.shapeToCoor(this.currentShape, this.origin);
-    this.fillCells(this.currentCoor, this.currentCoor[0].color);
-};
-
-
-tetris.drop = function () {
-    let undo = false;
-    this.fillCells(this.currentCoor, '');
-    this.origin.row++;
-
-    for (let i = 1; i < this.currentCoor.length; i++) {
-        this.currentCoor[i].row++;
-        let $coor = $(`.${this.currentCoor[i].row}`).find(`#${this.currentCoor[i].col}`);
-        if (this.ifUndo() || $coor.attr('blocked') === 'true') {
-            undo = true;
-        }
-    }
-
-    if (undo) {
-        for (let j = 1; j < this.currentCoor.length; j++) {
-            this.currentCoor[j].row--;
-        }
-        this.origin.row--;
-    }
-
-    this.fillCells(this.currentCoor, this.currentCoor[0].color);
-
-    if (undo) {
-        for (let i = 1; i < this.currentCoor.length; i++) {
-            let $coor = $(`.${this.currentCoor[i].row}`).find(`#${this.currentCoor[i].col}`);
-            $coor.attr('blocked', true);
-            if (this.currentCoor[i].row < 0 && !this.ended) {
-                tetris.gameOver();
-            }
-        }
-
-        this.fillCells(this.currentCoor, this.currentCoor[0].color);
-        this.clearRow();
-        this.spawn();
-    }
-};
-
-
-tetris.hardDrop = function () {
-
-    this.fillCells(this.currentCoor, '');
-    let blocked = false;
-
-    while(!(blocked || this.ifUndo())) {
-        blocked = false;
-        for (let i = 1; i < this.currentCoor.length; i++) {
-            $coor = $(`.${this.currentCoor[1].row}`).find(`#${this.currentCoor[1].col}`);
-            if ($coor.attr('blocked') === 'true') {
-                blocked = true;
-            }
-            this.currentCoor[i].row++;
-        }
-        this.origin.row++;
-        this.score += 10;
-    }
-
-    for (let j = 1; j < this.currentCoor.length; j++) {
-        this.currentCoor[j].row--;
-    }
-    this.fillCells(this.currentCoor, this.currentCoor[0].color);
-
-    for (let k = 1; k < this.currentCoor.length; k++) {
-        let $coor = $(`.${this.currentCoor[k].row}`).find(`#${this.currentCoor[k].col}`);
-        $coor.attr('blocked', 'true');
-        if (this.currentCoor[k].row < 0 && !this.ended) {
-            tetris.gameOver();
-        }
-    }
-
-    this.score -= 10;
-    this.setScore();
-
-    this.clearRow();
-    this.spawn();
-
-    SFXHardDrop.play();
-};
-
-
 tetris.clearBoard = function () {
 
     for (let row = 0; row < 20; row++) {
@@ -255,12 +121,141 @@ tetris.clearRow = function () {
 };
 
 
-tetris.setScore = function () {
-    let $points = $('#points');
-    let $linesCleared = $('#linesCleared');
+tetris.drawPlayField = function () {
+    for (let row = 0; row < 20; row++) {
+        $('#playfield').append(`<tr class=${row}></tr>`);
+        for (let col = 0; col < 10; col++) {
+            $(`.${row}`).append(`<td id=${col} blocked=${false}></td>`);
+        }
+    }
 
-    $points.html(this.score);
-    $linesCleared.html(this.lines);
+    for (let sideRow = 0; sideRow < 5; sideRow++) {
+        $('#next-block').append(`<tr class=side${sideRow}></tr>`);
+        $('#hold-block').append(`<tr class=hold${sideRow}></tr>`);
+        for (let sideCol = 0; sideCol < 5; sideCol++) {
+            $(`.side${sideRow}`).append(`<td id=side${sideCol}></td>`);
+            $(`.hold${sideRow}`).append(`<td id=hold${sideCol}></td>`);
+        }
+    }
+};
+
+
+tetris.drop = function () {
+    let undo = false;
+    this.fillCells(this.currentCoor, '');
+    this.origin.row++;
+
+    for (let i = 1; i < this.currentCoor.length; i++) {
+        this.currentCoor[i].row++;
+        let $coor = $(`.${this.currentCoor[i].row}`).find(`#${this.currentCoor[i].col}`);
+        if (this.ifUndo() || $coor.attr('blocked') === 'true') {
+            undo = true;
+        }
+    }
+
+    if (undo) {
+        for (let j = 1; j < this.currentCoor.length; j++) {
+            this.currentCoor[j].row--;
+        }
+        this.origin.row--;
+    }
+
+    this.fillCells(this.currentCoor, this.currentCoor[0].color);
+
+    if (undo) {
+        for (let i = 1; i < this.currentCoor.length; i++) {
+            let $coor = $(`.${this.currentCoor[i].row}`).find(`#${this.currentCoor[i].col}`);
+            $coor.attr('blocked', true);
+            if (this.currentCoor[i].row < 0 && !this.ended) {
+                tetris.gameOver();
+            }
+        }
+
+        this.fillCells(this.currentCoor, this.currentCoor[0].color);
+        this.clearRow();
+        this.spawn();
+    }
+};
+
+
+tetris.fillCells = function(coordinates, fillColor) {
+    for (let i = 1; i < coordinates.length; i++) {
+        let row = coordinates[i].row;
+        let col = coordinates[i].col;
+        let $coor = $(`.${row}`).find(`#${col}`);
+        $coor.attr('bgcolor', `${fillColor}`);
+    }
+};
+
+
+tetris.fillHoldPreview = function (coordinates, fillColor) {
+    for (let i = 1; i < coordinates.length; i++) {
+        let row = coordinates[i].row;
+        let col = coordinates[i].col;
+        let $coor = $(`.hold${row}`).find(`#hold${col}`);
+        $coor.attr('bgcolor', `${fillColor}`);
+    }
+};
+
+
+tetris.fillSpawnPreview = function (coordinates, fillColor) {
+    for (let i = 1; i < coordinates.length; i++) {
+        let row = coordinates[i].row;
+        let col = coordinates[i].col;
+        let $coor = $(`.side${row}`).find(`#side${col}`);
+        $coor.attr('bgcolor', `${fillColor}`);
+    }
+};
+
+
+tetris.gameOver = function () {
+    this.ended = true;
+    this.pauseGame();
+    this.setHighscore();
+    SFXGameOver.play();
+    document.getElementById('background_audio').muted = true;
+    $('.gameover').addClass('visible');
+};
+
+
+tetris.hardDrop = function () {
+
+    this.fillCells(this.currentCoor, '');
+    let blocked = false;
+
+    while(!(blocked || this.ifUndo())) {
+        blocked = false;
+        for (let i = 1; i < this.currentCoor.length; i++) {
+            $coor = $(`.${this.currentCoor[1].row}`).find(`#${this.currentCoor[1].col}`);
+            if ($coor.attr('blocked') === 'true') {
+                blocked = true;
+            }
+            this.currentCoor[i].row++;
+        }
+        this.origin.row++;
+        this.score += 10;
+    }
+
+    for (let j = 1; j < this.currentCoor.length; j++) {
+        this.currentCoor[j].row--;
+    }
+    this.fillCells(this.currentCoor, this.currentCoor[0].color);
+
+    for (let k = 1; k < this.currentCoor.length; k++) {
+        let $coor = $(`.${this.currentCoor[k].row}`).find(`#${this.currentCoor[k].col}`);
+        $coor.attr('blocked', 'true');
+        if (this.currentCoor[k].row < 0 && !this.ended) {
+            tetris.gameOver();
+        }
+    }
+
+    this.score -= 10;
+    this.setScore();
+
+    this.clearRow();
+    this.spawn();
+
+    SFXHardDrop.play();
 };
 
 
@@ -301,41 +296,49 @@ tetris.holdPreview = function (shape) {
 };
 
 
-tetris.fillHoldPreview = function (coordinates, fillColor) {
-    for (let i = 1; i < coordinates.length; i++) {
-        let row = coordinates[i].row;
-        let col = coordinates[i].col;
-        let $coor = $(`.hold${row}`).find(`#hold${col}`);
-        $coor.attr('bgcolor', `${fillColor}`);
-    }
-};
-
-
-tetris.spawn = function () {
-    if (this.shapes === undefined || this.shapes.length <= 1) {
-        this.shapes = [];
-        for (let i = 0; i < window.shapes.length; i++) {
-            this.shapes.push(window.shapes[i]);
+tetris.ifUndo = function () {
+    for (let i = 1; i < this.currentCoor.length; i++) {
+        let row = this.currentCoor[i].row;
+        let col = this.currentCoor[i].col;
+        let $coor = $(`.${row}`).find(`#${col}`);
+        if (row < 0 && (col >= 0 && col < 10)) {
+            return false;
         }
+
+
+        if ($coor.length === 0 ||
+            jQuery.inArray($coor.attr('bgcolor'), this.colors) >= 0 ||
+            $coor.attr('blocked') === 'true') {
+                return true;
+            }
+        }
+        return false;
+    };
+
+
+tetris.move = function(direction){
+
+    this.fillCells(this.currentCoor,'');
+    if (direction === 'right') {
+        this.origin.col++;
+    } else if (direction === 'left') {
+        this.origin.col--;
     }
 
-    let randomIdx = Math.floor(Math.random() * this.shapes.length);
-    this.currentShape = this.nextShape;
-    this.nextShape = this.shapes.splice(randomIdx, 1)[0];
-    this.nextShapePreview(this.nextShape);
-    this.origin = { row: -2, col: 5 };
-    this.swapped = false;
     this.currentCoor = this.shapeToCoor(this.currentShape, this.origin);
-};
 
-
-tetris.fillSpawnPreview = function (coordinates, fillColor) {
-    for (let i = 1; i < coordinates.length; i++) {
-        let row = coordinates[i].row;
-        let col = coordinates[i].col;
-        let $coor = $(`.side${row}`).find(`#side${col}`);
-        $coor.attr('bgcolor', `${fillColor}`);
+    if(this.ifUndo()) {
+        if (direction === 'right') {
+            this.origin.col--;
+        } else if (direction === 'left'){
+            this.origin.col++;
+        }
+    } else {
+        SFXPieceMoveLR.play();
     }
+
+    this.currentCoor = this.shapeToCoor(this.currentShape, this.origin);
+    this.fillCells(this.currentCoor, this.currentCoor[0].color);
 };
 
 
@@ -348,6 +351,136 @@ tetris.nextShapePreview = function (shape) {
     }
     let coordinates = this.shapeToCoor(shape, { row: 2, col: 2 });
     this.fillSpawnPreview(coordinates, coordinates[0].color);
+};
+
+
+tetris.pauseGame = function () {
+    let $play = $('.play');
+    let $pause = $('.pause');
+    if (tetris.isPaused === true) {
+        $play.removeClass('play');
+        $play.addClass('pause');
+        $play.html('Pause');
+        tetris.isPaused = false;
+    } else if (tetris.isPaused === false){
+        $pause.removeClass('pause');
+        $pause.addClass('play');
+        $pause.html('Play');
+        tetris.isPaused = true;
+    }
+};
+
+
+tetris.rotate = function () {
+    let prevShape = this.currentShape;
+    this.fillCells(this.currentCoor, '');
+
+    if (this.currentShape === 'L') {
+        this.currentShape = 'L90';
+    } else if (this.currentShape === 'L90') {
+        this.currentShape = 'L180';
+    } else if (this.currentShape === 'L180') {
+        this.currentShape = 'L270';
+    } else if (this.currentShape === 'L270') {
+        this.currentShape = 'L';
+    }
+
+    if (this.currentShape === 'J') {
+        this.currentShape = 'J90';
+    } else if (this.currentShape === 'J90') {
+        this.currentShape = 'J180';
+    } else if (this.currentShape === 'J180') {
+        this.currentShape = 'J270';
+    } else if (this.currentShape === 'J270') {
+        this.currentShape = 'J';
+    }
+
+    if (this.currentShape === 'T') {
+        this.currentShape = 'T90';
+    } else if (this.currentShape === 'T90') {
+        this.currentShape = 'T180';
+    } else if (this.currentShape === 'T180') {
+        this.currentShape = 'T270';
+    } else if (this.currentShape === 'T270') {
+        this.currentShape = 'T';
+    }
+
+    if (this.currentShape === 'S') {
+        this.currentShape = 'S90';
+    } else if (this.currentShape === 'S90') {
+        this.currentShape = 'S';
+    }
+
+    if (this.currentShape === 'Z') {
+        this.currentShape = 'Z90';
+    } else if (this.currentShape === 'Z90') {
+        this.currentShape = 'Z';
+    }
+
+    if (this.currentShape === 'I') {
+        this.currentShape = 'I90';
+    } else if (this.currentShape === 'I90') {
+        this.currentShape = 'I';
+    }
+
+    this.currentCoor = this.shapeToCoor(this.currentShape, this.origin);
+
+    for (let i = 1; i < this.currentCoor.length; i++) {
+        if (this.ifUndo()) {
+            this.currentShape = prevShape;
+        }
+    }
+
+    SFXRotate.play();
+    this.currentCoor = this.shapeToCoor(this.currentShape, this.origin);
+    this.fillCells(this.currentCoor, this.currentCoor[0].color);
+};
+
+
+tetris.setHighscore = function () {
+    let newHighscore = (this.score > myStorage.getItem('highscore5'));
+    let i = 5;
+    let name;
+
+    while (newHighscore && i > 0) {
+        name = name || prompt("You set a new highscore! Please enter your name!", "AAA");
+        if (i === 5) {
+            myStorage.setItem('highscore5', this.score);
+            myStorage.setItem('name5', name);
+            myStorage.setItem('lines5', this.lines);
+        } else if (this.score > myStorage.getItem(`highscore${i}`)) {
+            let scoreHold = myStorage.getItem(`highscore${i}`);
+            let nameHold = myStorage.getItem(`name${i}`);
+            let linesHold = myStorage.getItem(`lines${i}`);
+
+            myStorage.setItem(`highscore${i}`, this.score);
+            myStorage.setItem(`name${i}`, name);
+            myStorage.setItem(`lines${i}`, this.lines);
+
+            myStorage.setItem(`highscore${i + 1}`, scoreHold);
+            myStorage.setItem(`name${i + 1}`, nameHold);
+            myStorage.setItem(`lines${i + 1}`, linesHold);
+            newHighscore = (this.score >= myStorage.getItem(`highscore${i - 1}`));
+        } else {
+            newHighscore = false;
+        }
+        i--;
+    }
+
+    for (var k = 1; k <= 5; k++) {
+        $(`.hs${k}`).html(myStorage.getItem(`highscore${k}`));
+        $(`.name${k}`).html(myStorage.getItem(`name${k}`));
+        $(`.lines${k}`).html(myStorage.getItem(`lines${k}`));
+    }
+};
+
+
+tetris.setScore = function () {
+    let $points = $('#points');
+    let $linesCleared = $('#linesCleared');
+
+    $points.html(this.score);
+    $linesCleared.html(this.lines);
 };
 
 
@@ -544,154 +677,21 @@ tetris.shapeToCoor = function (shape, origin) {
 };
 
 
-tetris.rotate = function () {
-    let prevShape = this.currentShape;
-    this.fillCells(this.currentCoor, '');
-
-    if (this.currentShape === 'L') {
-        this.currentShape = 'L90';
-    } else if (this.currentShape === 'L90') {
-        this.currentShape = 'L180';
-    } else if (this.currentShape === 'L180') {
-        this.currentShape = 'L270';
-    } else if (this.currentShape === 'L270') {
-        this.currentShape = 'L';
+tetris.spawn = function () {
+    if (this.shapes === undefined || this.shapes.length <= 1) {
+        this.shapes = [];
+        for (let i = 0; i < window.shapes.length; i++) {
+            this.shapes.push(window.shapes[i]);
+        }
     }
 
-    if (this.currentShape === 'J') {
-        this.currentShape = 'J90';
-    } else if (this.currentShape === 'J90') {
-        this.currentShape = 'J180';
-    } else if (this.currentShape === 'J180') {
-        this.currentShape = 'J270';
-    } else if (this.currentShape === 'J270') {
-        this.currentShape = 'J';
-    }
-
-    if (this.currentShape === 'T') {
-        this.currentShape = 'T90';
-    } else if (this.currentShape === 'T90') {
-        this.currentShape = 'T180';
-    } else if (this.currentShape === 'T180') {
-        this.currentShape = 'T270';
-    } else if (this.currentShape === 'T270') {
-        this.currentShape = 'T';
-    }
-
-    if (this.currentShape === 'S') {
-        this.currentShape = 'S90';
-    } else if (this.currentShape === 'S90') {
-        this.currentShape = 'S';
-    }
-
-    if (this.currentShape === 'Z') {
-        this.currentShape = 'Z90';
-    } else if (this.currentShape === 'Z90') {
-        this.currentShape = 'Z';
-    }
-
-    if (this.currentShape === 'I') {
-        this.currentShape = 'I90';
-    } else if (this.currentShape === 'I90') {
-        this.currentShape = 'I';
-    }
-
+    let randomIdx = Math.floor(Math.random() * this.shapes.length);
+    this.currentShape = this.nextShape;
+    this.nextShape = this.shapes.splice(randomIdx, 1)[0];
+    this.nextShapePreview(this.nextShape);
+    this.origin = { row: -2, col: 5 };
+    this.swapped = false;
     this.currentCoor = this.shapeToCoor(this.currentShape, this.origin);
-
-    for (let i = 1; i < this.currentCoor.length; i++) {
-        if (this.ifUndo()) {
-            this.currentShape = prevShape;
-        }
-    }
-
-    SFXRotate.play();
-    this.currentCoor = this.shapeToCoor(this.currentShape, this.origin);
-    this.fillCells(this.currentCoor, this.currentCoor[0].color);
-};
-
-
-tetris.ifUndo = function () {
-    for (let i = 1; i < this.currentCoor.length; i++) {
-        let row = this.currentCoor[i].row;
-        let col = this.currentCoor[i].col;
-        let $coor = $(`.${row}`).find(`#${col}`);
-        if (row < 0 && (col >= 0 && col < 10)) {
-            return false;
-        }
-
-
-        if ($coor.length === 0 ||
-            jQuery.inArray($coor.attr('bgcolor'), this.colors) >= 0 ||
-            $coor.attr('blocked') === 'true') {
-                return true;
-        }
-    }
-    return false;
-};
-
-
-tetris.pauseGame = function () {
-    let $play = $('.play');
-    let $pause = $('.pause');
-    if (tetris.isPaused === true) {
-        $play.removeClass('play');
-        $play.addClass('pause');
-        $play.html('Pause');
-        tetris.isPaused = false;
-    } else if (tetris.isPaused === false){
-        $pause.removeClass('pause');
-        $pause.addClass('play');
-        $pause.html('Play');
-        tetris.isPaused = true;
-    }
-};
-
-
-tetris.setHighscore = function () {
-    let newHighscore = (this.score > myStorage.getItem('highscore5'));
-    let i = 5;
-    let name;
-
-    while (newHighscore && i > 0) {
-        name = name || prompt("You set a new highscore! Please enter your name!", "AAA");
-        if (i === 5) {
-            myStorage.setItem('highscore5', this.score);
-            myStorage.setItem('name5', name);
-            myStorage.setItem('lines5', this.lines);
-        } else if (this.score > myStorage.getItem(`highscore${i}`)) {
-            let scoreHold = myStorage.getItem(`highscore${i}`);
-            let nameHold = myStorage.getItem(`name${i}`);
-            let linesHold = myStorage.getItem(`lines${i}`);
-
-            myStorage.setItem(`highscore${i}`, this.score);
-            myStorage.setItem(`name${i}`, name);
-            myStorage.setItem(`lines${i}`, this.lines);
-
-            myStorage.setItem(`highscore${i + 1}`, scoreHold);
-            myStorage.setItem(`name${i + 1}`, nameHold);
-            myStorage.setItem(`lines${i + 1}`, linesHold);
-            newHighscore = (this.score >= myStorage.getItem(`highscore${i - 1}`));
-        } else {
-            newHighscore = false;
-        }
-        i--;
-    }
-
-    for (var k = 1; k <= 5; k++) {
-        $(`.hs${k}`).html(myStorage.getItem(`highscore${k}`));
-        $(`.name${k}`).html(myStorage.getItem(`name${k}`));
-        $(`.lines${k}`).html(myStorage.getItem(`lines${k}`));
-    }
-};
-
-
-tetris.gameOver = function () {
-    this.ended = true;
-    this.pauseGame();
-    this.setHighscore();
-    SFXGameOver.play();
-    document.getElementById('background_audio').muted = true;
-    $('.gameover').addClass('visible');
 };
 
 
