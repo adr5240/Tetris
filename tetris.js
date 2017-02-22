@@ -1,5 +1,3 @@
-let Piece = require('./pieces.js');
-
 // SFX
 // Player input
 const SFXPieceHold = new Audio('SFX/SFX_PieceHold.ogg');
@@ -20,9 +18,9 @@ const SFXGameOver = new Audio('SFX/SFX_GameOver.ogg');
 class Tetris {
 
     constructor() {
-        this.piece = new Piece();
-        this.currentShape = piece.shapes[ Math.floor(Math.random() * piece.shapes.length) ];
-        this.nextShape = piece.shapes[ Math.floor(Math.random() * piece.shapes.length) ];
+        this.piece = new Pieces();
+        this.currentShape = this.piece.shapes[ Math.floor(Math.random() * this.piece.shapes.length) ];
+        this.nextShape = this.piece.shapes[ Math.floor(Math.random() * this.piece.shapes.length) ];
         this.origin = { row: -2, col: 5 };
         this.colors = ['PURPLE', 'ORANGE', 'YELLOW', 'GREEN', 'RED', 'CYAN', 'BLUE'];
         this.score = 0;
@@ -56,7 +54,6 @@ class Tetris {
         this.holdShape = undefined;
         this.setScore();
     }
-
 
     clearRow() {
         let drops = 0;
@@ -163,7 +160,7 @@ class Tetris {
                 let $coor = $(`.${this.currentCoor[i].row}`).find(`#${this.currentCoor[i].col}`);
                 $coor.attr('blocked', true);
                 if (this.currentCoor[i].row < 0 && !this.ended) {
-                    tetris.gameOver();
+                    this.gameOver();
                 }
             }
 
@@ -222,7 +219,7 @@ class Tetris {
         while(!(blocked || this.ifUndo())) {
             blocked = false;
             for (let i = 1; i < this.currentCoor.length; i++) {
-                $coor = $(`.${this.currentCoor[1].row}`).find(`#${this.currentCoor[1].col}`);
+                let $coor = $(`.${this.currentCoor[1].row}`).find(`#${this.currentCoor[1].col}`);
                 if ($coor.attr('blocked') === 'true') {
                     blocked = true;
                 }
@@ -241,7 +238,7 @@ class Tetris {
             let $coor = $(`.${this.currentCoor[k].row}`).find(`#${this.currentCoor[k].col}`);
             $coor.attr('blocked', 'true');
             if (this.currentCoor[k].row < 0 && !this.ended) {
-                tetris.gameOver();
+                this.gameOver();
             }
         }
 
@@ -275,7 +272,7 @@ class Tetris {
             this.fillCells(this.currentCoor, '');
             this.swapped = true;
             this.origin = { row: -1, col: 5 };
-            this.currentCoor = Pieces.shapeToCoor(this.currentShape, this.origin);
+            this.currentCoor = this.piece.shapeToCoor(this.currentShape, this.origin);
         }
     }
 
@@ -287,7 +284,7 @@ class Tetris {
                 $coor.attr('bgcolor', ``);
             }
         }
-        let coordinates = Pieces.shapeToCoor(shape, { row: 2, col: 2 });
+        let coordinates = this.piece.shapeToCoor(shape, { row: 2, col: 2 });
         this.fillHoldPreview(coordinates, coordinates[0].color);
     }
 
@@ -322,7 +319,7 @@ class Tetris {
             this.origin.col--;
         }
 
-        this.currentCoor = Pieces.shapeToCoor(this.currentShape, this.origin);
+        this.currentCoor = this.piece.shapeToCoor(this.currentShape, this.origin);
 
         if(this.ifUndo()) {
             if (direction === 'right') {
@@ -334,7 +331,7 @@ class Tetris {
             SFXPieceMoveLR.play();
         }
 
-        this.currentCoor = Pieces.shapeToCoor(this.currentShape, this.origin);
+        this.currentCoor = this.piece.shapeToCoor(this.currentShape, this.origin);
         this.fillCells(this.currentCoor, this.currentCoor[0].color);
     }
 
@@ -346,7 +343,7 @@ class Tetris {
                 $coor.attr('bgcolor', ``);
             }
         }
-        let coordinates = Pieces.shapeToCoor(shape, { row: 2, col: 2 });
+        let coordinates = this.piece.shapeToCoor(shape, { row: 2, col: 2 });
         this.fillSpawnPreview(coordinates, coordinates[0].color);
     }
 
@@ -354,16 +351,16 @@ class Tetris {
     pauseGame() {
         let $play = $('.play');
         let $pause = $('.pause');
-        if (tetris.isPaused === true) {
+        if (this.isPaused === true) {
             $play.removeClass('play');
             $play.addClass('pause');
             $play.html('Pause');
-            tetris.isPaused = false;
-        } else if (tetris.isPaused === false){
+            this.isPaused = false;
+        } else if (this.isPaused === false){
             $pause.removeClass('pause');
             $pause.addClass('play');
             $pause.html('Play');
-            tetris.isPaused = true;
+            this.isPaused = true;
         }
     }
 
@@ -420,7 +417,7 @@ class Tetris {
             this.currentShape = 'I';
         }
 
-        this.currentCoor = Pieces.shapeToCoor(this.currentShape, this.origin);
+        this.currentCoor = this.piece.shapeToCoor(this.currentShape, this.origin);
 
         for (let i = 1; i < this.currentCoor.length; i++) {
             if (this.ifUndo()) {
@@ -429,7 +426,7 @@ class Tetris {
         }
 
         SFXRotate.play();
-        this.currentCoor = Pieces.shapeToCoor(this.currentShape, this.origin);
+        this.currentCoor = this.piece.shapeToCoor(this.currentShape, this.origin);
         this.fillCells(this.currentCoor, this.currentCoor[0].color);
     }
 
@@ -484,8 +481,8 @@ class Tetris {
     spawn() {
         if (this.shapes === undefined || this.shapes.length <= 1) {
             this.shapes = [];
-            for (let i = 0; i < window.shapes.length; i++) {
-                this.shapes.push(window.shapes[i]);
+            for (let i = 0; i < this.piece.shapes.length; i++) {
+                this.shapes.push(this.piece.shapes[i]);
             }
         }
 
@@ -495,7 +492,7 @@ class Tetris {
         this.nextShapePreview(this.nextShape);
         this.origin = { row: -2, col: 5 };
         this.swapped = false;
-        this.currentCoor = Pieces.shapeToCoor(this.currentShape, this.origin);
+        this.currentCoor = this.piece.shapeToCoor(this.currentShape, this.origin);
     }
 }
 
@@ -529,13 +526,15 @@ $(document).ready(function () {
         $(`.lines${i}`).html(myStorage.getItem(`lines${i}`));
     }
 
-    tetris.drawPlayField();
-    tetris.currentCoor = tetris.shapeToCoor(tetris.currentShape, tetris.origin);
-    tetris.nextShapePreview(tetris.nextShape);
-    tetris.fillCells(tetris.currentCoor, 'blue');
-    tetris.isPaused = true;
-    tetris.ended = false;
-    tetris.muted = false;
+    let game = new Tetris();
+
+    game.drawPlayField();
+    game.currentCoor = game.piece.shapeToCoor(game.currentShape, game.origin);
+    game.nextShapePreview(game.nextShape);
+    game.fillCells(game.currentCoor, 'blue');
+    game.isPaused = true;
+    game.ended = false;
+    game.muted = false;
 
     let music = document.getElementById("background_audio");
     music.volume = 1;
@@ -555,23 +554,23 @@ $(document).ready(function () {
     $playMusic.hide();
 
     btn.onclick = function() {
-        if (tetris.isPaused === false){
+        if (game.isPaused === false){
             let $pause = $('.pause');
             $pause.removeClass('pause');
             $pause.addClass('play');
             $pause.html('Play');
-            tetris.isPaused = true;
+            game.isPaused = true;
         }
         modal.style.display = "block";
     };
 
     hsbtn.onclick = function () {
-        if (tetris.isPaused === false){
+        if (game.isPaused === false){
             let $pause = $('.pause');
             $pause.removeClass('pause');
             $pause.addClass('play');
             $pause.html('Play');
-            tetris.isPaused = true;
+            game.isPaused = true;
         }
         hsmodal.style.display = "block";
     };
@@ -590,59 +589,59 @@ $(document).ready(function () {
             hsmodal.style.display = "none";
         }
         if (event.target === $playAgain[0]) {
-            tetris.ended = false;
-            tetris.clearBoard();
+            game.ended = false;
+            game.clearBoard();
             $gameOver.removeClass('visible');
-            if (tetris.muted === false) {
+            if (game.muted === false) {
                 document.getElementById('background_audio').muted = false;
             }
 
-            tetris.pauseGame();
+            game.pauseGame();
         }
         if (event.target === $playMusic[0]) {
             document.getElementById('background_audio').muted = false;
             $playMusic.hide();
             $pauseMusic.show();
-            tetris.muted = false;
+            game.muted = false;
         }
         if (event.target === $pauseMusic[0]) {
             document.getElementById('background_audio').muted = true;
             $pauseMusic.hide();
             $playMusic.show();
-            tetris.muted = true;
+            game.muted = true;
         }
     };
 
     // controls
     $(document).keydown(function (e) {
 
-        if (tetris.isPaused === false) {
+        if (game.isPaused === false) {
             if (e.keyCode === 37) {
                 e.preventDefault();
-                tetris.move('left');
+                game.move('left');
             } else if (e.keyCode === 39) {
                 e.preventDefault();
-                tetris.move('right');
+                game.move('right');
             } else if (e.keyCode === 38) {
                 e.preventDefault();
-                tetris.rotate();
+                game.rotate();
             } else if (e.keyCode === 40) {
                 e.preventDefault();
-                tetris.score += 5;
-                tetris.setScore();
+                game.score += 5;
+                game.setScore();
                 SFXSoftDrop.play();
-                tetris.drop();
+                game.drop();
             } else if (e.keyCode === 32){
                 e.preventDefault();
-                tetris.hardDrop();
+                game.hardDrop();
             } else if (e.keyCode === 16) {
                 e.preventDefault();
-                tetris.holdPiece();
+                game.holdPiece();
             }
         }
 
         if (e.keyCode === 27) {
-            tetris.pauseGame();
+            game.pauseGame();
         }
     });
 
@@ -655,7 +654,7 @@ $(document).ready(function () {
             $play.removeClass('play');
             $play.addClass('pause');
             $play.html('Pause');
-            tetris.isPaused = false;
+            game.isPaused = false;
         });
 
         $pause.on('click', function(e) {
@@ -664,14 +663,14 @@ $(document).ready(function () {
             $pause.removeClass('pause');
             $pause.addClass('play');
             $pause.html('Play');
-            tetris.isPaused = true;
+            game.isPaused = true;
         });
 
-        if (!tetris.isPaused) {
-            tetris.drop();
+        if (!game.isPaused) {
+            game.drop();
         }
-        window.setTimeout(gravity, 500 - (tetris.speed * 50));
+        window.setTimeout(gravity, 500 - (game.speed * 50));
     };
-    window.setTimeout(gravity, 500 - (tetris.speed * 50));
+    window.setTimeout(gravity, 500 - (game.speed * 50));
 
 });

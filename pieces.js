@@ -1,4 +1,4 @@
-const Pieces = {
+class Pieces {
 
     constructor() {
         this.shapes = ['L', 'L', 'L', 'L',
@@ -8,9 +8,9 @@ const Pieces = {
                        'S', 'S', 'S', 'S',
                        'Z', 'Z', 'Z', 'Z',
                        'I', 'I', 'I', 'I'];
-    },
+    }
 
-    shapeToCoor: function (shape, origin) {
+    shapeToCoor (shape, origin) {
         if (shape === 'L') {
             return [
                     { color: 'orange' },
@@ -201,6 +201,4 @@ const Pieces = {
             ];
         }
     }
-};
-
-module.exports = Pieces;
+}
