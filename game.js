@@ -1,3 +1,21 @@
+// SFX
+// Player input
+const SFXPieceHold = new Audio('SFX/SFX_PieceHold.ogg');
+const SFXPieceMoveLR = new Audio('SFX/SFX_PieceMoveLR.ogg');
+const SFXHardDrop = new Audio('SFX/SFX_PieceHardDrop.ogg');
+const SFXSoftDrop = new Audio('SFX/SFX_PieceFall.ogg');
+const SFXRotate = new Audio('SFX/SFX_ButtonUp.ogg');
+
+// Line Clears
+const SFXClearLineSingle = new Audio('SFX/SFX_SpecialLineClearSingle.ogg');
+const SFXClearLineDouble = new Audio('SFX/SFX_SpecialLineClearDouble.ogg');
+const SFXClearLineTriple = new Audio('SFX/SFX_SpecialLineClearTriple.ogg');
+const SFXClearTetris = new Audio('SFX/SFX_SpecialTetris.ogg');
+
+// Game Over
+const SFXGameOver = new Audio('SFX/SFX_GameOver.ogg');
+
+
 $(document).ready(function () {
     window.myStorage = localStorage;
     if (myStorage.length === 0) {
